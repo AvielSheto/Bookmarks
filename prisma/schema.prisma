@@ -9,23 +9,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
- id Int @id @default(autoincrement())
- createAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
- email String
- hash String
+  email String @unique
+  hash  String
 
- firstName String?
- lastName String?
+  firstName String?
+  lastName  String?
+  
+  Bookmarks  Bookmark[]
+
+  @@map("user")
 }
-model Bookmark {
- id Int @id @default(autoincrement())
- createAt DateTime @default(now())
- updatedAt DateTime @updatedAt
 
- title String
- description String?
- link String
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  link        String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
 }
