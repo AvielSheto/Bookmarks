@@ -7,6 +7,7 @@ import * as pactum from 'pactum';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from 'src/auth/dto';
+import { EditUserDto } from 'src/user/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -80,7 +81,6 @@ describe('App e2e', () => {
       });
     });
 
-    
     describe('Signin', () => {
       it('Should throw if email empty', () => {
         return pactum
@@ -107,34 +107,50 @@ describe('App e2e', () => {
             password: dto.password,
           })
           .expectStatus(400);
-
       });
 
-      it('Should signin', () =>{
+      it('Should signin', () => {
         return pactum
-        .spec()
-        .post('/auth/signin')
-        .withBody(dto)
-        .expectStatus(200)
-        .stores('userAt', 'access_token')
+          .spec()
+          .post('/auth/signin')
+          .withBody(dto)
+          .expectStatus(200)
+          .stores('userAt', 'access_token');
       });
     });
   });
 
   describe('User', () => {
     describe('Get me', () => {
-      it('Should get current user', ()=>{
+      it('Should get current user', () => {
         return pactum
-        .spec()
-        .get('/users/me')
-        .withHeaders({
-          Authorization: 'Bearer $S{userAt}',
-        })
-        .expectStatus(200)
-      })
+          .spec()
+          .get('/users/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
     });
 
-    describe('Edit user', () => {});
+    // describe('Edit user', () => {
+    //   it('should edit user', () => {
+    //     const dto: EditUserDto = {
+    //       firstName: 'Aviel',
+    //       email: 'aviel@gmail.com',
+    //     };
+    //     return pactum
+    //       .spec()
+    //       .patch('/users')
+    //       .withHeaders({
+    //         Authorization: 'Bearer $S{userAt}',
+    //       })
+    //       .withBody(dto)
+    //       .expectStatus(200)
+    //       .expectBodyContains(dto.firstName)
+    //       .expectBodyContains(dto.email);
+    //   });
+    // });
   });
 
   describe('Bookmarks', () => {
@@ -150,4 +166,3 @@ describe('App e2e', () => {
 function stores(arg0: string, arg1: string) {
   throw new Error('Function not implemented.');
 }
-
