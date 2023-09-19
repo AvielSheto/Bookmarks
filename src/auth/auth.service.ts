@@ -8,6 +8,7 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,6 +16,7 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
+
   async signup(dto: AuthDto) {
     const hash = await argon.hash(dto.password);
     try {
@@ -68,7 +70,7 @@ export class AuthService {
 
   async signToken(
     userId: number,
-    email: String,
+    email: string,
   ): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,

@@ -43,14 +43,13 @@ describe('App e2e', () => {
       email: 'aviel@gmail.com',
       password: '123',
     };
-
     describe('Signup', () => {
       it('Should throw if email empty', () => {
         return pactum
           .spec()
           .post('/auth/signup')
           .withBody({
-            email: dto.email,
+            password: dto.password,
           })
           .expectStatus(400);
       });
@@ -133,24 +132,24 @@ describe('App e2e', () => {
       });
     });
 
-    // describe('Edit user', () => {
-    //   it('should edit user', () => {
-    //     const dto: EditUserDto = {
-    //       firstName: 'Aviel',
-    //       email: 'aviel@gmail.com',
-    //     };
-    //     return pactum
-    //       .spec()
-    //       .patch('/users')
-    //       .withHeaders({
-    //         Authorization: 'Bearer $S{userAt}',
-    //       })
-    //       .withBody(dto)
-    //       .expectStatus(200)
-    //       .expectBodyContains(dto.firstName)
-    //       .expectBodyContains(dto.email);
-    //   });
-    // });
+    describe('Edit user', () => {
+      it('should edit user', () => {
+        const dto: EditUserDto = {
+          firstName: 'Aviel',
+          email: 'aviel@gmail.com',
+        };
+        return pactum
+          .spec()
+          .get('/users')
+          .withHeaders({
+            Authorization: `Bearer $S{userAt}`,
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email)
+      });
+    });
   });
 
   describe('Bookmarks', () => {

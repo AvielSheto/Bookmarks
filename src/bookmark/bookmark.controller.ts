@@ -20,7 +20,7 @@ export class BookmarkController {
   getBookmarks() {}
 
   @Get()
-  getBookmark() {}
+  getBookmarkById() {}
   
   @Post()
   createBookmark() {}
